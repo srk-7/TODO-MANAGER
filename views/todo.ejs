@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Todo Application</title>
+        <meta name="csrf-token" content="<%= csrfToken %>" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/css/styles.css" rel="stylesheet"/>
+        <script>
+            var token=document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content");
+                function updateTodo(id, completed)
+                {
+                fetch(`/todos/${id}`,{
+                    method :"put",
+                    headers :{"Content-Type": "application/json"},
+                    body:JSON.stringify({
+                        _csrf:token,
+                        completed: completed
+
+                    })
+                })
+                .then((res) =>{
+                    if(res.ok){
+                        window.location.reload();
+                    }
+                })
+                .catch((err)=>console.error(err));
+            }
+            function deleteTodo(id) {
+                fetch(`/todos/${id}`, {
+                    method: "delete",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        "_csrf":token
+                    })
+                })
+                .then((res)=> {
+                    if(res.ok) {
+                        window.location.reload();
+                    }
+                })
+                .catch((err) => console.error(err));
+                }
+        </script>
+    </head>
+    <body class="font-bold">
+        <div class="grid grid-cols-6">
+            <div class="col-start-3 col-span-2">
+                <svg class="absolute top-3 right-4 h-15 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+                <a href="/signout" class="text-black font-bold text-2xl underline absolute top-2 right-10">Signout</a>
+                <%- include ('header') %>
+                <form action="/todos" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <div class="flex gap-2 py-4">
+                        <div class="flex-auto">
+                            <input type="text" name="title" placeholder="Enter the Task Name" class="border border-black-300 rounded text-black-900 w-full p-2 text-sm" required />
+                        </div>
+                        <div class="flex-auto">
+                            <input type="date" name="dueDate" class="border border-black-300 rounded text-black-900 w-full p-2 text-sm leading-4" required/>
+                        </div>
+                        <div class="flex-none">
+                            <button type="submit" class="bg-green-600 text-white px-5 py-1.5 rounded font-medium mr-2 mb-2">Add</button>
+                        </div>
+                    </div>
+                </form>  
+                <div>
+                    <%- include('todos.ejs',{title: "Overdue", data: overdue}) %>
+                    <%- include('todos.ejs',{title: "Due Today", data: dueToday}) %>
+                    <%- include('todos.ejs',{title: "Due Later", data: dueLater}) %>
+                    <%- include('todos.ejs',{title: "completedItems", data: completedItems}) %><br><br><br>
+                    <b><%- include('footer') %></b>
+                </div>
+            </div>
+        </div> 
+    </body>
+</html>

@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <name="viewport" content="width=device-width", initial-scale="1.0" />
+        <meta name="csrf-token" content="<%= csrfToken %>" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/css/styles.css" rel="stylesheet"/>
+        <title>
+            <%= title %>
+        </title>
+    </head>
+    <body class="bg-slate-950">
+        <div class="grid grid-cols-6">
+            <div class="col-start-3 col-span-2">
+                <%- include ('header') %>
+                <p class="py-4 font-bold text-3xl text-yellow-300 text-blue-600 text-center">Welcome to Todo Application</p>
+                <p class="py-2 font-bold text-2xl text-white text-center">New here? <a href="/signup" class="text-green-500">Sign-up</a></p>
+                <p class="py-2 font-bold text-2xl text-white text-center">Already have an Account? <a href="/login" class="text-green-500">Sign-in</a></p>
+            </div>
+        </div> 
+    </body>
+</html>
